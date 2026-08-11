@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AegisOne</string>
+    <string name="app_tagline">Secure Remote Device Management</string>
+    <string name="app_developer">Developed by Devang Shah</string>
+    <string name="app_motto">Secure. Manage. Protect.</string>
+
+    <string name="home_connected">Connected</string>
+    <string name="home_disconnected">Disconnected</string>
+    <string name="home_status_idle">No active session</string>
+    <string name="home_status_pairing">Awaiting enrollment</string>
+    <string name="home_status_running">AegisOne is active</string>
+
+    <string name="home_section_status">Status</string>
+    <string name="home_section_actions">Quick actions</string>
+
+    <string name="action_enroll">Enroll this device</string>
+    <string name="action_health">Run device health check</string>
+    <string name="action_policies">Review security policies</string>
+    <string name="action_settings">Open settings</string>
+
+    <string name="enroll_title">Enroll this device</string>
+    <string name="enroll_subtitle">Open the AegisOne dashboard, generate a pairing code, then enter it here.</string>
+    <string name="enroll_code_label">Pairing code</string>
+    <string name="enroll_device_id_label">Device ID</string>
+    <string name="enroll_button">Pair with my owner</string>
+    <string name="enroll_busy">Pairing…</string>
+    <string name="enroll_success">Paired. You can close this screen.</string>
+
+    <string name="fg_title">AegisOne is active</string>
+    <string name="fg_body">Connected to your owner. Tap to manage.</string>
+
+    <string name="loc_notification_title">AegisOne is sharing your location</string>
+    <string name="loc_notification_body">Your owner requested a one-time fix. Visible indicator.</string>
+    <string name="loc_consent_title">Share your location?</string>
+    <string name="loc_consent_body">AegisOne wants to share your location with your owner. They will see a single location fix.</string>
+    <string name="loc_consent_grant">Share once</string>
+    <string name="loc_consent_deny">Not now</string>
+    <string name="loc_last_label">Last shared location</string>
+    <string name="loc_no_fix">No location shared yet.</string>
+    <string name="loc_share">Share a one-time location</string>
+    <string name="loc_share_busy">Sharing location…</string>
+    <string name="loc_share_done">Location shared with your owner.</string>
+    <string name="loc_share_failed">Could not share location. Check permissions.</string>
+    <string name="perm_needed">Permission required</string>
+</resources>

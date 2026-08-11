@@ -1,0 +1,47 @@
+# Render build context (where render.yaml lives) is the repo root, but the
+# Dockerfile + start.sh live under backend/. Keep that path here.
+
+# Avoid sending `.venv`, tests, .env files, secrets, and Android sources to the
+# Docker build context — they're large, sensitive, or irrelevant to the image.
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+.env
+.env.local
+.env.*.local
+tests/
+docs/
+*.log
+logs/
+*.pem
+*.key
+secrets/
+
+# Repo metadata that's huge but useless in a container
+.claude/
+.github/
+android-agent/
+dashboard/
+contracts/
+infra/
+scripts/
+*.md
+!backend/**/*.md
+!backend/README.md
+
+# Git / OS noise
+.git/
+.gitignore
+.DS_Store
+Thumbs.db

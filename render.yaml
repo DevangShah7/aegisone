@@ -1,0 +1,71 @@
+# Render Blueprint — AegisOne Slice 2
+# Deploy via https://dashboard.render.com/blueprints → New Blueprint Instance → paste this repo URL.
+# Renders: 1 web service (backend) + 1 managed Postgres + 1 managed Redis.
+# Free tier: web service sleeps after 15 min idle; use cron-job.org keepalive (see DEPLOY.md).
+
+services:
+  - type: pserv
+    name: aegisone-postgres
+    plan: free
+    runtime: postgresql
+    databaseName: aegisone
+    databaseUser: aegisone
+    # Postgres free plan expires after 90 days; back up before then.
+    ipAllowList: []  # only allow internal services
+    # Note: postgresUrl comes back as DATABASE_URL via Render env binding.
+
+  - type: redis
+    name: aegisone-redis
+    plan: free
+    ipAllowList: []
+    maxmemoryPolicy: noeviction
+    # Redis free plan = 25 MB, no expiry.
+
+  - type: web
+    name: aegisone-backend
+    plan: free
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    buildCommand: ""
+    startCommand: bash start.sh
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: APP_PORT
+        value: "8000"
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: aegisone-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: aegisone-redis
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_REFRESH_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "15"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "30"
+      - key: CORS_ORIGINS
+        sync: false  # set after dashboard deploy — paste https://aegisone-dashboard.vercel.app
+      - key: TRUSTED_PROXIES
+        value: 0.0.0.0/0  # Render sits behind their own proxy
+      - key: RATE_LIMIT_LOGIN_PER_MIN
+        value: "5"
+      - key: RATE_LIMIT_LOGIN_PER_EMAIL_PER_MIN
+        value: "10"
+      - key: RATE_LIMIT_REGISTER_PER_HOUR
+        value: "3"

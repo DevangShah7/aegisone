@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="aegis_one_primary">#1F4ED8</color>
+    <color name="aegis_one_on_primary">#FFFFFF</color>
+    <color name="aegis_one_background_light">#F8FAFC</color>
+    <color name="aegis_one_background_dark">#0B1220</color>
+</resources>

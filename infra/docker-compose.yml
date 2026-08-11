@@ -1,0 +1,87 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: aegisone-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aegisone
+      POSTGRES_USER: aegisone
+      POSTGRES_PASSWORD: aegisone_dev_only
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegisone -d aegisone"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: aegisone-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: aegisone-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: aegisone
+      MINIO_ROOT_PASSWORD: aegisone_dev_only
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Local-dev only. Production deploys to a long-running host, not here.
+  # To use: run `python scripts/gen-secrets.py` first, then `docker compose -f infra/docker-compose.yml up backend`.
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: aegisone-backend
+    restart: unless-stopped
+    profiles: ["backend"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ../backend/.env
+    environment:
+      ENVIRONMENT: dev
+      DATABASE_URL: postgresql+psycopg://aegisone:aegisone_dev_only@postgres:5432/aegisone
+      REDIS_URL: redis://redis:6379/0
+      MINIO_ENDPOINT: minio:9000
+      TRUSTED_PROXIES: 127.0.0.1/32,::1/128
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; urllib.request.urlopen('http://localhost:8000/healthz', timeout=2); sys.exit(0)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:

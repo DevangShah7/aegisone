@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- AegisOne mark — placeholder shield glyph. Replace before release. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,18 L78,28 V58 C78,72 68,82 54,86 C40,82 30,72 30,58 V28 Z" />
+    <path
+        android:fillColor="#1F4ED8"
+        android:pathData="M54,30 L66,36 V58 C66,66 60,72 54,74 C48,72 42,66 42,58 V36 Z" />
+</vector>

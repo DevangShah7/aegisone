@@ -1,0 +1,3 @@
+# Generated OpenAPI artifact.
+
+The backend emits its OpenAPI spec to this directory. The dashboard consumes `openapi.json` via `openapi-typescript`. The Android agent regenerates Kotlin DTOs from the same file via `openapi-generator-cli` (planned Milestone 2).

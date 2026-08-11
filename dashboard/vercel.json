@@ -1,0 +1,12 @@
+# Vercel deploy config for the AegisOne dashboard.
+# Root Directory in Vercel project settings must be set to `dashboard` if this
+# lives at the repo root. The simpler path: drop a vercel.json INSIDE dashboard/
+# (this file) and let Vercel auto-detect it. Then set `NEXT_PUBLIC_API_BASE_URL`
+# in Vercel → Project → Settings → Environment Variables to the Render backend URL.
+
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["iad1"]
+}
