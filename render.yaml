@@ -1,14 +1,3 @@
-# Render Blueprint — AegisOne Slice 2
-# Deploy via https://dashboard.render.com/blueprints → New Blueprint Instance → paste repo URL.
-#
-# Strategy: deploy ONLY the web service from the Blueprint. Postgres and Redis
-# are created manually in the Render dashboard (their free tier GUI doesn't
-# accept them in Blueprints reliably), and DATABASE_URL / REDIS_URL are
-# pasted into the web service's environment after the fact.
-#
-# The web service uses the native python runtime (Render's free plan does
-# not allow runtime: docker).
-
 services:
   - type: web
     name: aegisone-backend
@@ -28,8 +17,6 @@ services:
         value: "8000"
       - key: PYTHON_VERSION
         value: "3.12.7"
-      # DATABASE_URL and REDIS_URL must be set manually after creating
-      # aegisone-postgres + aegisone-redis in the Render dashboard.
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: JWT_REFRESH_SECRET_KEY
@@ -48,4 +35,3 @@ services:
         value: "10"
       - key: RATE_LIMIT_REGISTER_PER_HOUR
         value: "3"
-      # CORS_ORIGINS is set manually AFTER the Vercel deploy.
