@@ -1,26 +1,15 @@
 # Render Blueprint — AegisOne Slice 2
 # Deploy via https://dashboard.render.com/blueprints → New Blueprint Instance → paste repo URL.
-# Renders: 1 web service (backend) + 1 managed Postgres + 1 managed Redis.
-# Free tier: web service sleeps after 15 min idle; use cron-job.org keepalive (see DEPLOY.md).
 #
-# Note: Render's free plan does NOT allow `runtime: docker`. We use the
-# native Python runtime instead and let Render read pyproject.toml.
-# `rootDir: backend` keeps the build context to just the FastAPI package.
+# Strategy: deploy ONLY the web service from the Blueprint. Postgres and Redis
+# are created manually in the Render dashboard (their free tier GUI doesn't
+# accept them in Blueprints reliably), and DATABASE_URL / REDIS_URL are
+# pasted into the web service's environment after the fact.
+#
+# The web service uses the native python runtime (Render's free plan does
+# not allow runtime: docker).
 
 services:
-  - type: pserv
-    name: aegisone-postgres
-    plan: free
-    runtime: postgresql
-    databaseName: aegisone
-    databaseUser: aegisone
-    # Postgres free plan expires after 90 days; back up before then.
-
-  - type: redis
-    name: aegisone-redis
-    plan: free
-    # Redis free plan = 25 MB, no expiry. connectionString auto-bound to REDIS_URL.
-
   - type: web
     name: aegisone-backend
     plan: free
@@ -39,16 +28,8 @@ services:
         value: "8000"
       - key: PYTHON_VERSION
         value: "3.12.7"
-      - key: DATABASE_URL
-        fromService:
-          type: pserv
-          name: aegisone-postgres
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: aegisone-redis
-          property: connectionString
+      # DATABASE_URL and REDIS_URL must be set manually after creating
+      # aegisone-postgres + aegisone-redis in the Render dashboard.
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: JWT_REFRESH_SECRET_KEY
@@ -67,5 +48,4 @@ services:
         value: "10"
       - key: RATE_LIMIT_REGISTER_PER_HOUR
         value: "3"
-      # CORS_ORIGINS is set manually in the Render dashboard AFTER the
-      # Vercel deploy, once the dashboard URL is known.
+      # CORS_ORIGINS is set manually AFTER the Vercel deploy.
