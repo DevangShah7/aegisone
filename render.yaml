@@ -2,6 +2,10 @@
 # Deploy via https://dashboard.render.com/blueprints → New Blueprint Instance → paste repo URL.
 # Renders: 1 web service (backend) + 1 managed Postgres + 1 managed Redis.
 # Free tier: web service sleeps after 15 min idle; use cron-job.org keepalive (see DEPLOY.md).
+#
+# Note: Render's free plan does NOT allow `runtime: docker`. We use the
+# native Python runtime instead and let Render read pyproject.toml.
+# `rootDir: backend` keeps the build context to just the FastAPI package.
 
 services:
   - type: pserv
@@ -11,7 +15,6 @@ services:
     databaseName: aegisone
     databaseUser: aegisone
     # Postgres free plan expires after 90 days; back up before then.
-    # Note: connectionString is auto-bound to DATABASE_URL on linked services.
 
   - type: redis
     name: aegisone-redis
@@ -21,9 +24,9 @@ services:
   - type: web
     name: aegisone-backend
     plan: free
-    runtime: docker
+    runtime: python
     rootDir: backend
-    dockerfilePath: ./Dockerfile
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
     startCommand: bash start.sh
     healthCheckPath: /healthz
     autoDeploy: true
@@ -34,6 +37,8 @@ services:
         value: INFO
       - key: APP_PORT
         value: "8000"
+      - key: PYTHON_VERSION
+        value: "3.12.7"
       - key: DATABASE_URL
         fromService:
           type: pserv

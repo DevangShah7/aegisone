@@ -1,0 +1,15 @@
+# Pinned runtime dependencies for Render (free Python runtime reads this).
+# Mirror of pyproject.toml [project.dependencies]. Keep both in sync.
+fastapi>=0.115,<0.116
+uvicorn[standard]>=0.30,<0.40
+pydantic>=2.8,<3
+pydantic-settings>=2.5,<3
+email-validator>=2.2,<3
+sqlalchemy[asyncio]>=2.0.30,<3
+psycopg[binary,pool]>=3.2,<4
+alembic>=1.13,<2
+PyJWT>=2.9,<3
+argon2-cffi>=23.1,<24
+redis[hiredis]>=5.0,<6
+boto3>=1.34,<2
+httpx>=0.27,<0.30
