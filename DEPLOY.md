@@ -72,10 +72,10 @@ If the repo doesn't exist yet, create it at https://github.com/new first (public
    Deploy → Clear build cache & deploy**.
 5. Once the backend service is **Live**, copy its URL — looks like:
    ```
-   https://aegisone-backend.onrender.com
+   https://aegisone-backend-devshah.onrender.com
    ```
 
-Verify with: `curl https://aegisone-backend.onrender.com/healthz` → should return `{"status":"ok"}`.
+Verify with: `curl https://aegisone-backend-devshah.onrender.com/healthz` → should return `{"status":"ok"}`.
 
 ---
 
@@ -84,7 +84,7 @@ Verify with: `curl https://aegisone-backend.onrender.com/healthz` → should ret
 1. Open https://vercel.com → **Add New → Project** → **Import** `DevangShah7/aegisone`.
 2. Set **Root Directory** = `dashboard`.
 3. **Environment Variables** → add:
-   - `NEXT_PUBLIC_API_BASE_URL` = `https://aegisone-backend.onrender.com`
+   - `NEXT_PUBLIC_API_BASE_URL` = `https://aegisone-backend-devshah.onrender.com`
 4. Click **Deploy**. Wait ~1 min.
 5. Copy the dashboard URL — looks like:
    ```
@@ -107,7 +107,7 @@ Render's free web service sleeps after 15 minutes of no requests. Without a keep
 
 1. Sign in to https://cron-job.org.
 2. **Cronjobs → New Cronjob**.
-3. URL: `https://aegisone-backend.onrender.com/healthz`
+3. URL: `https://aegisone-backend-devshah.onrender.com/healthz`
 4. Schedule: every **5 minutes** (`*/5 * * * *`).
 5. Save.
 
@@ -126,7 +126,7 @@ $env:JAVA_HOME = 'C:\Users\DEVANG\jdk-17\jdk-17.0.0+8'
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 # The base URL is consumed as a Gradle property (-P), NOT a shell env var.
 # Setting $env:AegisOneApiBaseUrl has no effect.
-.\gradlew.bat :app:assembleDebug -PAegisOneApiBaseUrl='https://aegisone-backend.onrender.com' --console=plain
+.\gradlew.bat :app:assembleDebug -PAegisOneApiBaseUrl='https://aegisone-backend-devshah.onrender.com' --console=plain
 ```
 
 New APK at: `E:\Code\AegisOne\android-agent\app\build\outputs\apk\debug\app-debug.apk`
@@ -140,7 +140,7 @@ adb install -r E:\Code\AegisOne\android-agent\app\build\outputs\apk\debug\app-de
 
 ## Final URLs (paste into the chat once live)
 
-- Backend: `https://aegisone-backend.onrender.com` (verify `/healthz` → 200)
+- Backend: `https://aegisone-backend-devshah.onrender.com` (verify `/healthz` → 200)
 - Dashboard: `https://dashboard-kappa-six-97.vercel.app` (verify login loads)
 - Canonical dashboard alias `https://aegisone-dashboard.vercel.app` is held
   by a separate Vercel SSO project from a previous attempt — use the

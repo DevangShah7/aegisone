@@ -6,7 +6,7 @@
 #   2. Rebuild the APK with the production backend URL embedded.
 #
 # Usage:
-#   .\deploy.ps1 -BackendUrl "https://aegisone-backend.onrender.com"
+#   .\deploy.ps1 -BackendUrl "https://aegisone-backend-devshah.onrender.com"
 #
 # Optional: skip APK rebuild if you've already done it manually.
 #   .\deploy.ps1 -BackendUrl "..." -SkipApk

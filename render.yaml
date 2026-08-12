@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: aegisone-backend
+    name: aegisone-backend-devshah
     plan: free
     runtime: python
     rootDir: backend
