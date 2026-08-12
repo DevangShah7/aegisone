@@ -34,20 +34,42 @@ If the repo doesn't exist yet, create it at https://github.com/new first (public
 
 ## Step 2 — Deploy backend on Render (Blueprint)
 
-1. Open https://dashboard.render.com → **Blueprints** → **New Blueprint Instance**.
-2. Paste the repo URL: `https://github.com/DevangShah7/aegisone`.
-3. Render reads `render.yaml` at the repo root and offers:
-   - `aegisone-postgres` (free Postgres, 90-day expiry)
-   - `aegisone-redis` (free Redis, 25 MB)
-   - `aegisone-backend` (free web service)
-4. Click **Apply**. Wait ~5–10 min for the first build.
-5. Once the backend service is "Live", copy its URL — looks like:
+> **First time, or re-deploying from scratch?** Postgres and Redis are
+> created **manually in the Render dashboard** (free tier, 90-day
+> Postgres expiry, 25 MB Redis). The Blueprint only provisions the web
+> service. The `render.yaml` already declares `DATABASE_URL`, `REDIS_URL`
+> and `CORS_ORIGINS` as `sync: false` so the dashboard shows them blank
+> and prompts you to fill them in.
+
+1. **Provision the data services first** (one-time, free tier):
+   - Render dashboard → **New → PostgreSQL** → name `aegisone-postgres`,
+     region Oregon, plan Free, Postgres 16. Copy the **Internal Database URL**
+     (looks like `postgresql://aegisone_user:…@dpg-…/aegisone`).
+   - Render dashboard → **New → Redis** → name `aegisone-redis`, region
+     Oregon, plan Free (25 MB). Copy the **Internal Redis URL** (looks
+     like `redis://red-…:6379`).
+2. **Apply the Blueprint**:
+   - Render dashboard → **Blueprints** → **New Blueprint Instance**.
+   - Paste the repo URL: `https://github.com/DevangShah7/aegisone`.
+   - Render reads `render.yaml` at the repo root and offers the
+     `aegisone-backend` web service.
+   - Click **Apply**. Wait ~5–10 min for the first build.
+3. **Wire the env vars** (Render dashboard → `aegisone-backend` →
+   **Environment**). For each of `DATABASE_URL`, `REDIS_URL`,
+   `CORS_ORIGINS`, click **Edit**, paste the value, save:
+   - `DATABASE_URL` — take the Postgres **Internal** URL and rewrite the
+     scheme to `postgresql+psycopg://` (the async driver requirement).
+     Example:
+     `postgresql+psycopg://aegisone_user:<pw>@dpg-…-a.oregon-postgres.render.com/aegisone`
+   - `REDIS_URL` — paste the Redis Internal URL as-is.
+   - `CORS_ORIGINS` — paste your future Vercel URL placeholder for now
+     (you'll fix it after Step 3):
+     `https://aegisone-dashboard.vercel.app`
+4. **Trigger a deploy** so the new env vars take effect: **Manual
+   Deploy → Clear build cache & deploy**.
+5. Once the backend service is **Live**, copy its URL — looks like:
    ```
    https://aegisone-backend.onrender.com
-   ```
-6. **Open the backend service → Environment tab → set `CORS_ORIGINS`** to your future Vercel URL (replace later if you don't have it yet — placeholder is fine for now):
-   ```
-   CORS_ORIGINS=https://aegisone-dashboard.vercel.app
    ```
 
 Verify with: `curl https://aegisone-backend.onrender.com/healthz` → should return `{"status":"ok"}`.
@@ -67,6 +89,12 @@ Verify with: `curl https://aegisone-backend.onrender.com/healthz` → should ret
    ```
 
 Now go back to **Step 2** and fix `CORS_ORIGINS` if you used a placeholder. Redeploy via Render's "Manual Deploy → Clear build cache & deploy" if needed.
+
+> **What if Vercel says `DEPLOYMENT_NOT_FOUND` for the dashboard URL?**
+> That means the dashboard project was never (or no longer) deployed.
+> Go to https://vercel.com → your team → **Add New → Project** → import
+> the same repo, set **Root Directory** to `dashboard`, add the env var
+> above, and Deploy.
 
 ---
 

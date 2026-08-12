@@ -75,3 +75,15 @@ secrets/
 # Editor / tooling temp files
 *.bak
 *.tmp
+
+# Stray files with parentheses in their names (macOS / shell-mangled
+# filenames from copy-paste of things like "EnrollScreen(onEnrolled)"
+# into bash on Windows). Empty and useless — ignore instead of tracking.
+*(*)
+*)*
+
+# Experimental one-off deploy driver (Playwright) — kept out of the
+# tree. Use deploy.ps1 + the Render dashboard instead.
+render-deploy.js
+render-step*.png
+render-fail-*.png
