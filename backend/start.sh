@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# Render start script.
-# 1. Run migrations (idempotent on every cold start).
-# 2. Start uvicorn. Render expects the process to bind to $PORT (we map 8000 -> 8000).
+# Render start script (native Python runtime).
+# Render's Python runtime sets the working directory to the repo root by
+# default. We `cd` to the backend directory where alembic.ini + app/ live.
 set -euo pipefail
 
+cd "$(dirname "$0")"
+
+echo "[start.sh] cwd=$(pwd)"
 echo "[start.sh] Running alembic upgrade head..."
-cd /app
 alembic upgrade head
 
 # Background workers (HeartbeatWorker, CommandPollWorker, etc.) are scheduled
