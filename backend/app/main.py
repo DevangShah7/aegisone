@@ -55,6 +55,15 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
             )
         if "*" in settings.cors_origins:
             raise RuntimeError("CORS_ORIGINS must not include '*' in production.")
+        # Reject empty CORS in production — an empty allow-list makes the
+        # browser reject every cross-origin request with a confusing
+        # "No Access-Control-Allow-Origin" error. Better to fail loudly
+        # on boot than silently cripple the API.
+        if not settings.cors_origins_list:
+            raise RuntimeError(
+                "CORS_ORIGINS must be set in production (comma-separated "
+                "list of allowed origins, e.g. https://your-dashboard.example.com)."
+            )
 
     logger.info(
         "AegisOne backend starting (environment=%s, version=%s, developer=%s)",

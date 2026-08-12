@@ -39,5 +39,10 @@ services:
         sync: false
       - key: REDIS_URL
         sync: false
+      # Pre-fill with the canonical Vercel dashboard hostname so the
+      # backend boots with a working CORS allow-list out of the box.
+      # The dashboard is also deployed at a generated *-vercel.app URL
+      # (dashboard-kappa-six-97.vercel.app), so the list is a
+      # comma-separated allow-list. Replace if you move the dashboard.
       - key: CORS_ORIGINS
-        sync: false
+        value: https://dashboard-kappa-six-97.vercel.app
