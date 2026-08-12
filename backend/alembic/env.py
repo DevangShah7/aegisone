@@ -10,6 +10,7 @@ The ``target_metadata`` is wired to ``app.models.Base.metadata`` so
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import sys
 import warnings
