@@ -63,8 +63,11 @@ If the repo doesn't exist yet, create it at https://github.com/new first (public
      `postgresql+psycopg://aegisone_user:<pw>@dpg-…-a.oregon-postgres.render.com/aegisone`
    - `REDIS_URL` — paste the Redis Internal URL as-is.
    - `CORS_ORIGINS` — paste your future Vercel URL placeholder for now
-     (you'll fix it after Step 3):
-     `https://aegisone-dashboard.vercel.app`
+     (you'll fix it after Step 3). **Use the actual deployed URL** the
+     Vercel step produces, e.g.
+     `https://dashboard-kappa-six-97.vercel.app`. The
+     `aegisone-dashboard.vercel.app` hostname is currently held by an
+     older SSO-protected Vercel project and will be rejected.
 4. **Trigger a deploy** so the new env vars take effect: **Manual
    Deploy → Clear build cache & deploy**.
 5. Once the backend service is **Live**, copy its URL — looks like:
@@ -138,7 +141,10 @@ adb install -r E:\Code\AegisOne\android-agent\app\build\outputs\apk\debug\app-de
 ## Final URLs (paste into the chat once live)
 
 - Backend: `https://aegisone-backend.onrender.com` (verify `/healthz` → 200)
-- Dashboard: `https://aegisone-dashboard.vercel.app` (verify login loads)
+- Dashboard: `https://dashboard-kappa-six-97.vercel.app` (verify login loads)
+- Canonical dashboard alias `https://aegisone-dashboard.vercel.app` is held
+  by a separate Vercel SSO project from a previous attempt — use the
+  `dashboard-kappa-six-97.vercel.app` URL above until that's cleaned up.
 
 ---
 
