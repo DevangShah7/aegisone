@@ -121,8 +121,9 @@ cd E:\Code\AegisOne\android-agent
 $env:JAVA_HOME = 'C:\Users\DEVANG\jdk-17\jdk-17.0.0+8'
 # Adjust path to wherever your JDK 17 actually lives if the above is wrong.
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
-$env:AegisOneApiBaseUrl = 'https://aegisone-backend.onrender.com'
-.\gradlew.bat :app:assembleDebug --console=plain
+# The base URL is consumed as a Gradle property (-P), NOT a shell env var.
+# Setting $env:AegisOneApiBaseUrl has no effect.
+.\gradlew.bat :app:assembleDebug -PAegisOneApiBaseUrl='https://aegisone-backend.onrender.com' --console=plain
 ```
 
 New APK at: `E:\Code\AegisOne\android-agent\app\build\outputs\apk\debug\app-debug.apk`

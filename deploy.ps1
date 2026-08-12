@@ -84,11 +84,11 @@ if (-not (Test-Path $jdk)) {
 }
 $env:JAVA_HOME = $jdk
 $env:Path = "$jdk\bin;$env:Path"
-$env:AegisOneApiBaseUrl = $BackendUrl
-
+# Note: Gradle does NOT auto-promote the AegisOneApiBaseUrl env var into a
+# project property — it must be passed on the command line as -P.
 Push-Location "android-agent"
 try {
-    .\gradlew.bat :app:assembleDebug --console=plain
+    & .\gradlew.bat :app:assembleDebug -PAegisOneApiBaseUrl="$BackendUrl" --console=plain
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Gradle build failed." -ForegroundColor Red
         exit 1
